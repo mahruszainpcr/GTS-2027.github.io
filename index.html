@@ -25,6 +25,9 @@ Sections: Navbar, Hero (55:45 split), Campaign Strip, About GTS, Benefit (TAK, S
     <link
         href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
         rel="stylesheet" />
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
 
     <!-- Tailwind CDN: utility dan tema tersedia di seluruh halaman tanpa build. -->
     <script src="https://cdn.tailwindcss.com"></script>
@@ -391,6 +394,69 @@ Sections: Navbar, Hero (55:45 split), Campaign Strip, About GTS, Benefit (TAK, S
             box-shadow: 0 0 0 3px rgba(0, 75, 95, .13);
         }
 
+        .registration-select2 + .select2-container {
+            width: 100% !important;
+        }
+
+        .select2-container--default .select2-selection--single {
+            height: 3.05rem;
+            border: 1px solid #c0c8cc;
+            border-radius: .875rem;
+            background: #fff;
+            color: #171c24;
+            font: inherit;
+            padding: .35rem .95rem;
+        }
+
+        .select2-container--default .select2-selection--single .select2-selection__rendered {
+            color: #171c24;
+            line-height: 2.25rem;
+            padding-left: 0;
+        }
+
+        .select2-container--default .select2-selection--single .select2-selection__placeholder {
+            color: #70787c;
+        }
+
+        .select2-container--default .select2-selection--single .select2-selection__arrow {
+            height: 2.85rem;
+            right: .6rem;
+        }
+
+        .select2-container--default.select2-container--open .select2-selection--single,
+        .select2-container--default .select2-selection--single:focus {
+            border-color: #004b5f;
+            box-shadow: 0 0 0 3px rgba(0, 75, 95, .13);
+        }
+
+        .select2-dropdown {
+            border: 1px solid #c0c8cc;
+            border-radius: .75rem;
+            overflow: hidden;
+            z-index: 110;
+        }
+
+        .select2-container--default .select2-search--dropdown .select2-search__field {
+            border: 1px solid #c0c8cc;
+            border-radius: .5rem;
+            padding: .55rem .7rem;
+        }
+
+        .select2-container--default .select2-results__option--highlighted[aria-selected] {
+            background: #004b5f;
+        }
+
+        .registration-manual-field {
+            display: flex;
+            flex-direction: column;
+            gap: .5rem;
+            margin-top: .25rem;
+        }
+
+        .registration-manual-field.hidden {
+            display: none;
+        }
+
         .registration-field input[readonly] {
             background: #eff3ff;
         }
@@ -606,6 +672,33 @@ Sections: Navbar, Hero (55:45 split), Campaign Strip, About GTS, Benefit (TAK, S
                             <span class="text-tertiary font-bold text-sm">⚡</span>
                             <span class="font-body-sm text-body-sm text-on-surface-variant font-medium">Untuk seluruh
                                 mahasiswa aktif Politeknik Caltex Riau.</span>
+                        </div>
+                        <div id="registrationCountdown" class="w-full max-w-xl rounded-3xl bg-primary-container p-5 text-on-primary shadow-xl sm:p-6">
+                            <div class="flex flex-col gap-1 sm:flex-row sm:items-center sm:justify-between sm:gap-4">
+                                <div>
+                                    <p class="font-label-badge text-label-badge uppercase tracking-widest text-tertiary-fixed">Pendaftaran ditutup dalam</p>
+                                    <p class="mt-1 font-label-md text-label-md text-on-primary-container">1 Oktober 2026 · 23:59 WIB</p>
+                                </div>
+                                <span id="countdownStatus" class="font-label-md text-label-md font-bold text-tertiary-fixed" role="status" aria-live="polite">Segera daftar</span>
+                            </div>
+                            <div id="countdownValues" class="mt-4 grid grid-cols-4 gap-2 sm:gap-3" aria-label="Hitung mundur penutupan pendaftaran">
+                                <div class="rounded-2xl bg-primary px-2 py-3 text-center shadow-inner">
+                                    <span id="countdownDays" class="block font-headline-sm text-headline-sm font-extrabold text-tertiary-fixed">--</span>
+                                    <span class="mt-1 block text-[10px] font-bold uppercase tracking-wider text-on-primary-container">Hari</span>
+                                </div>
+                                <div class="rounded-2xl bg-primary px-2 py-3 text-center shadow-inner">
+                                    <span id="countdownHours" class="block font-headline-sm text-headline-sm font-extrabold text-tertiary-fixed">--</span>
+                                    <span class="mt-1 block text-[10px] font-bold uppercase tracking-wider text-on-primary-container">Jam</span>
+                                </div>
+                                <div class="rounded-2xl bg-primary px-2 py-3 text-center shadow-inner">
+                                    <span id="countdownMinutes" class="block font-headline-sm text-headline-sm font-extrabold text-tertiary-fixed">--</span>
+                                    <span class="mt-1 block text-[10px] font-bold uppercase tracking-wider text-on-primary-container">Menit</span>
+                                </div>
+                                <div class="rounded-2xl bg-primary px-2 py-3 text-center shadow-inner">
+                                    <span id="countdownSeconds" class="block font-headline-sm text-headline-sm font-extrabold text-tertiary-fixed">--</span>
+                                    <span class="mt-1 block text-[10px] font-bold uppercase tracking-wider text-on-primary-container">Detik</span>
+                                </div>
+                            </div>
                         </div>
                     </div>
                     <!-- Right Column (45%) Hero Graphic Composition -->
@@ -1366,16 +1459,34 @@ Sections: Navbar, Hero (55:45 split), Campaign Strip, About GTS, Benefit (TAK, S
                                 </div>
                                 <div class="registration-field">
                                     <label for="asal-sekolah">Asal Sekolah</label>
-                                    <input id="asal-sekolah" name="Asal Sekolah" list="school-options" type="text" autocomplete="off" required />
-                                    <span class="registration-helper">Ketik untuk mencari, lalu pilih salah satu nama sekolah yang tersedia.</span>
+                                    <select id="asal-sekolah" class="registration-select2" name="Asal Sekolah" required>
+                                        <option value="" selected>Pilih nama sekolah</option>
+                                    </select>
+                                    <div id="asal-sekolah-manual-wrap" class="registration-manual-field hidden">
+                                        <label for="asal-sekolah-manual">Nama sekolah manual</label>
+                                        <input id="asal-sekolah-manual" type="text" autocomplete="organization" placeholder="Tulis nama sekolah kamu" />
+                                    </div>
+                                    <span class="registration-helper">Ketik untuk mencari nama sekolah. Pilih “Lainnya” jika sekolah belum tersedia.</span>
                                 </div>
                                 <div class="registration-field">
                                     <label for="kota-tujuan">Kota Tempat Tinggal Asal dan Tujuan GTS</label>
-                                    <input id="kota-tujuan" name="Kota Tempat Tinggal Asal dan Tujuan GTS" list="location-options" type="text" autocomplete="off" required />
+                                    <select id="kota-tujuan" class="registration-select2" name="Kota Tempat Tinggal Asal dan Tujuan GTS" required>
+                                        <option value="" selected>Pilih kabupaten/kota</option>
+                                    </select>
+                                    <div id="kota-tujuan-manual-wrap" class="registration-manual-field hidden">
+                                        <label for="kota-tujuan-manual">Kabupaten/kota manual</label>
+                                        <input id="kota-tujuan-manual" type="text" autocomplete="address-level2" placeholder="Tulis kabupaten/kota" />
+                                    </div>
                                 </div>
                                 <div class="registration-field">
                                     <label for="kota-sekolah">Kota atau Kabupaten Asal Sekolah</label>
-                                    <input id="kota-sekolah" name="Kota atau Kabupaten Asal Sekolah" list="location-options" type="text" autocomplete="off" required />
+                                    <select id="kota-sekolah" class="registration-select2" name="Kota atau Kabupaten Asal Sekolah" required>
+                                        <option value="" selected>Pilih kabupaten/kota asal sekolah</option>
+                                    </select>
+                                    <div id="kota-sekolah-manual-wrap" class="registration-manual-field hidden">
+                                        <label for="kota-sekolah-manual">Kabupaten/kota asal sekolah manual</label>
+                                        <input id="kota-sekolah-manual" type="text" autocomplete="address-level2" placeholder="Tulis kabupaten/kota asal sekolah" />
+                                    </div>
                                 </div>
                                 <div class="registration-field registration-field-wide">
                                     <label for="alasan">Berikan alasan kenapa ingin mengikuti GTS?</label>
@@ -2564,6 +2675,48 @@ Sections: Navbar, Hero (55:45 split), Campaign Strip, About GTS, Benefit (TAK, S
                 initTwibbon();
             });
         </script>
+    <script id="registration-countdown-script">
+        document.addEventListener('DOMContentLoaded', () => {
+            const deadline = new Date('2026-10-01T23:59:00+07:00').getTime();
+            const values = document.getElementById('countdownValues');
+            const status = document.getElementById('countdownStatus');
+            const parts = {
+                days: document.getElementById('countdownDays'),
+                hours: document.getElementById('countdownHours'),
+                minutes: document.getElementById('countdownMinutes'),
+                seconds: document.getElementById('countdownSeconds')
+            };
+            const pad = (value) => String(value).padStart(2, '0');
+
+            const renderCountdown = () => {
+                const remaining = deadline - Date.now();
+                if (remaining <= 0) {
+                    values.classList.add('hidden');
+                    status.textContent = 'Pendaftaran telah ditutup';
+                    status.classList.remove('text-tertiary-fixed');
+                    status.classList.add('text-secondary-fixed');
+                    return false;
+                }
+
+                const totalSeconds = Math.floor(remaining / 1000);
+                const days = Math.floor(totalSeconds / 86400);
+                const hours = Math.floor((totalSeconds % 86400) / 3600);
+                const minutes = Math.floor((totalSeconds % 3600) / 60);
+                const seconds = totalSeconds % 60;
+                parts.days.textContent = String(days);
+                parts.hours.textContent = pad(hours);
+                parts.minutes.textContent = pad(minutes);
+                parts.seconds.textContent = pad(seconds);
+                return true;
+            };
+
+            if (renderCountdown()) {
+                const timer = window.setInterval(() => {
+                    if (!renderCountdown()) window.clearInterval(timer);
+                }, 1000);
+            }
+        });
+    </script>
     <script id="registration-form-script">
         document.addEventListener('DOMContentLoaded', () => {
             const options = JSON.parse(document.getElementById('registration-options').textContent);
@@ -2589,32 +2742,117 @@ Sections: Navbar, Hero (55:45 split), Campaign Strip, About GTS, Benefit (TAK, S
             }, []);
             fillDatalist('school-options', schools);
             fillDatalist('location-options', options.locations);
+            const OTHER_VALUE = '__other__';
 
+            const selectFields = [
+                {
+                    id: 'asal-sekolah',
+                    values: schools,
+                    label: 'Asal Sekolah',
+                    placeholder: 'Pilih nama sekolah',
+                    manualId: 'asal-sekolah-manual',
+                    manualWrapId: 'asal-sekolah-manual-wrap'
+                },
+                {
+                    id: 'kota-tujuan',
+                    values: options.locations,
+                    label: 'Kota tempat tinggal dan tujuan GTS',
+                    placeholder: 'Pilih kabupaten/kota',
+                    manualId: 'kota-tujuan-manual',
+                    manualWrapId: 'kota-tujuan-manual-wrap'
+                },
+                {
+                    id: 'kota-sekolah',
+                    values: options.locations,
+                    label: 'Kota atau kabupaten asal sekolah',
+                    placeholder: 'Pilih kabupaten/kota asal sekolah',
+                    manualId: 'kota-sekolah-manual',
+                    manualWrapId: 'kota-sekolah-manual-wrap'
+                }
+            ];
             const listFields = [
                 { id: 'jurusan', values: options.departments, label: 'Jurusan' },
                 { id: 'prodi', values: options.programs, label: 'Prodi' },
-                { id: 'asal-sekolah', values: schools, label: 'Asal Sekolah' },
-                { id: 'kota-tujuan', values: options.locations, label: 'Kota tempat tinggal dan tujuan GTS' },
-                { id: 'kota-sekolah', values: options.locations, label: 'Kota atau kabupaten asal sekolah' }
+                ...selectFields
             ];
-            const validateListField = ({ id, values, label }) => {
-                const field = document.getElementById(id);
-                const typed = field.value.trim();
-                const match = values.find((value) => value.toLocaleLowerCase() === typed.toLocaleLowerCase());
-                if (!typed) {
-                    field.setCustomValidity(label + ' wajib dipilih dari daftar.');
-                } else if (!match) {
-                    field.setCustomValidity(label + ' harus dipilih dari daftar yang tersedia.');
-                } else {
-                    field.value = match;
-                    field.setCustomValidity('');
-                }
+            const fillSearchableSelect = (rule) => {
+                const field = document.getElementById(rule.id);
+                field.replaceChildren(new Option(rule.placeholder, ''));
+                rule.values.forEach((value) => field.add(new Option(value, value)));
+                field.add(new Option('Lainnya (tulis manual)', OTHER_VALUE));
+                $(field).select2({
+                    placeholder: rule.placeholder,
+                    allowClear: true,
+                    width: '100%'
+                });
             };
-            listFields.forEach((rule) => {
+
+            selectFields.forEach(fillSearchableSelect);
+
+            const validateListField = (rule) => {
+                const field = document.getElementById(rule.id);
+                const manual = rule.manualId ? document.getElementById(rule.manualId) : null;
+                const typed = field.value.trim();
+
+                if (!typed) {
+                    field.setCustomValidity(rule.label + ' wajib dipilih.');
+                    if (manual) manual.setCustomValidity('');
+                    return false;
+                }
+
+                if (typed === OTHER_VALUE) {
+                    field.setCustomValidity('');
+                    if (!manual || !manual.value.trim()) {
+                        if (manual) manual.setCustomValidity('Silakan isi ' + rule.label.toLowerCase() + ' secara manual.');
+                        return false;
+                    }
+                    manual.setCustomValidity('');
+                    return true;
+                }
+
+                const match = rule.values.find((value) => value.toLocaleLowerCase() === typed.toLocaleLowerCase());
+                field.setCustomValidity(match ? '' : rule.label + ' harus dipilih dari daftar.');
+                if (manual) manual.setCustomValidity('');
+                return Boolean(match);
+            };
+            const toggleManualField = (rule) => {
+                if (!rule.manualId) return;
+                const field = document.getElementById(rule.id);
+                const manual = document.getElementById(rule.manualId);
+                const wrapper = document.getElementById(rule.manualWrapId);
+                const isOther = field.value === OTHER_VALUE;
+                wrapper.classList.toggle('hidden', !isOther);
+                wrapper.setAttribute('aria-hidden', String(!isOther));
+                manual.required = isOther;
+                if (!isOther) {
+                    manual.value = '';
+                    manual.setCustomValidity('');
+                }
+                validateListField(rule);
+            };
+
+            selectFields.forEach((rule) => {
+                const field = document.getElementById(rule.id);
+                const manual = document.getElementById(rule.manualId);
+                $(field).on('change', () => toggleManualField(rule));
+                manual.addEventListener('input', () => validateListField(rule));
+                manual.addEventListener('blur', () => validateListField(rule));
+                toggleManualField(rule);
+            });
+
+            listFields.slice(0, 2).forEach((rule) => {
                 const field = document.getElementById(rule.id);
                 field.addEventListener('input', () => validateListField(rule));
                 field.addEventListener('blur', () => validateListField(rule));
             });
+
+            const getListFieldValue = (rule) => {
+                const field = document.getElementById(rule.id);
+                if (field.value === OTHER_VALUE && rule.manualId) {
+                    return document.getElementById(rule.manualId).value.trim();
+                }
+                return field.value;
+            };
 
             const timestamp = document.getElementById('timestamp');
             const setTimestamp = () => {
@@ -2668,14 +2906,14 @@ Sections: Navbar, Hero (55:45 split), Campaign Strip, About GTS, Benefit (TAK, S
                     jurusan: document.getElementById('jurusan').value,
                     prodi: document.getElementById('prodi').value,
                     ukuranBaju: document.getElementById('ukuran-baju').value,
-                    asalSekolah: document.getElementById('asal-sekolah').value,
-                    kotaGTS: document.getElementById('kota-tujuan').value,
+                    asalSekolah: getListFieldValue(selectFields[0]),
+                    kotaGTS: getListFieldValue(selectFields[1]),
                     alasan: document.getElementById('alasan').value.trim(),
                     presentasi: document.getElementById('presentasi').value.trim(),
                     komitmen: document.getElementById('komitmen').value.trim(),
                     angkatan: selectedGeneration ? selectedGeneration.value : '',
                     twibbon: document.getElementById('twibbon-link').value.trim(),
-                    kotaSekolah: document.getElementById('kota-sekolah').value
+                    kotaSekolah: getListFieldValue(selectFields[2])
                 };
 
                 submitButton.disabled = true;
