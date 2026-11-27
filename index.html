@@ -965,7 +965,7 @@ Sections: Navbar, Hero (55:45 split), Campaign Strip, About GTS, Benefit (TAK, S
                                 </div>
                                 <div>
                                     <h3 class="font-headline-sm text-headline-sm text-on-surface font-extrabold">
-                                        Exclusive Merchandise</h3>
+                                        Dapatkan Merchandise-mu</h3>
                                     <p
                                         class="font-body-md text-body-md text-on-surface-variant mt-space-xs leading-relaxed">
                                         Dapatkan paket merchandise khusus PCR Squad (kaos eksklusif, id-badge, lanyard,
@@ -2836,7 +2836,6 @@ Sections: Navbar, Hero (55:45 split), Campaign Strip, About GTS, Benefit (TAK, S
             const form = document.getElementById('videoSubmissionForm');
             const status = document.getElementById('videoSubmissionStatus');
             const submitButton = form.querySelector('button[type="submit"]');
-            const deadline = new Date('2026-11-15T23:59:59+07:00').getTime();
 const googleScriptUrl = 'https://script.google.com/macros/s/AKfycbw6GaGs5Z-f04Rdiy5Ng9ut6zLVwJO8uCFsesYaH0LyVMTOWbcT05GHpn96fQN511eG/exec';
             const successModal = document.getElementById('registrationSuccessModal');
             const successTitle = document.getElementById('registrationSuccessTitle');
@@ -2849,11 +2848,6 @@ const googleScriptUrl = 'https://script.google.com/macros/s/AKfycbw6GaGs5Z-f04Rd
 
             form.addEventListener('submit', (event) => {
                 event.preventDefault();
-                if (Date.now() > deadline) {
-                    status.textContent = 'Batas pengumpulan video sudah berakhir.';
-                    submitButton.disabled = true;
-                    return;
-                }
                 if (!form.reportValidity()) {
                     status.textContent = 'Mohon isi semua kolom wajib dengan benar.';
                     return;
